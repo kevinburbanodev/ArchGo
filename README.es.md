@@ -2,7 +2,7 @@
 
 [English](README.md) | Español
 
-Una plantilla robusta para construir aplicaciones en Go utilizando arquitectura hexagonal (también conocida como puertos y adaptadores).
+Una plantilla robusta para construir aplicaciones en Go utilizando arquitectura hexagonal (también conocida como puertos y adaptadores). Esta plantilla utiliza Gin como framework web para manejar las peticiones HTTP y proporciona una base sólida para construir APIs escalables y mantenibles.
 
 ## Estructura del Proyecto
 
@@ -27,6 +27,16 @@ Una plantilla robusta para construir aplicaciones en Go utilizando arquitectura 
 - Go 1.21 o superior
 - PostgreSQL
 - Make (opcional, para comandos make)
+- Gin Web Framework (instalado automáticamente vía go.mod)
+
+## Stack Tecnológico
+
+- **Framework Web**: Gin
+- **Base de Datos**: PostgreSQL con GORM
+- **Arquitectura**: Hexagonal (Puertos y Adaptadores)
+- **Autenticación**: JWT
+- **Documentación**: Swagger
+- **Containerización**: Docker & Docker Compose
 
 ## Configuración
 

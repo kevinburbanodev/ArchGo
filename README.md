@@ -2,7 +2,7 @@
 
 English | [Español](README.es.md)
 
-A robust template for building Go applications using hexagonal architecture (also known as ports and adapters).
+A robust template for building Go applications using hexagonal architecture (also known as ports and adapters). This template uses Gin as the web framework for handling HTTP requests and provides a solid foundation for building scalable and maintainable APIs.
 
 ## Project Structure
 
@@ -27,6 +27,16 @@ A robust template for building Go applications using hexagonal architecture (als
 - Go 1.21 or higher
 - PostgreSQL
 - Make (optional, for make commands)
+- Gin Web Framework (automatically installed via go.mod)
+
+## Tech Stack
+
+- **Web Framework**: Gin
+- **Database**: PostgreSQL with GORM
+- **Architecture**: Hexagonal (Ports and Adapters)
+- **Authentication**: JWT
+- **Documentation**: Swagger
+- **Containerization**: Docker & Docker Compose
 
 ## Configuration
 
