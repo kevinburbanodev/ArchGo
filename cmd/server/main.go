@@ -56,6 +56,9 @@ func main() {
 	// Crear una instancia de Gin
 	r := gin.Default()
 
+	// Aplicar rate limiter a todas las rutas
+	r.Use(middleware.RateLimiterMiddleware())
+
 	// Inicializar handlers
 	healthHandler := handlers.NewHealthHandler()
 	userRepo := persistence.NewUserRepositoryImpl(cfg.DB)
