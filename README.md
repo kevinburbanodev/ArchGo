@@ -1,41 +1,43 @@
 # Go Hexagonal Template
 
-Este proyecto es una plantilla para crear aplicaciones en Go utilizando la arquitectura hexagonal (también conocida como puertos y adaptadores).
+English | [Español](README.es.md)
 
-## Estructura del Proyecto
+A robust template for building Go applications using hexagonal architecture (also known as ports and adapters).
+
+## Project Structure
 
 ```
 .
 ├── cmd/
-│   └── server/         # Punto de entrada de la aplicación
+│   └── server/         # Application entry point
 ├── internal/
-│   ├── handlers/       # Manejadores HTTP
-│   ├── infrastructure/ # Implementaciones concretas
-│   ├── middleware/     # Middleware de la aplicación
-│   └── modules/        # Módulos de la aplicación
-│       └── user/       # Módulo de usuario
-│           ├── application/    # Casos de uso
-│           ├── domain/         # Modelos y puertos
-│           └── infrastructure/ # Implementaciones
-└── tests/              # Tests de la aplicación
+│   ├── handlers/       # HTTP handlers
+│   ├── infrastructure/ # Concrete implementations
+│   ├── middleware/     # Application middleware
+│   └── modules/        # Application modules
+│       └── user/       # User module
+│           ├── application/    # Use cases
+│           ├── domain/         # Models and ports
+│           └── infrastructure/ # Implementations
+└── tests/              # Application tests
 ```
 
-## Requisitos
+## Requirements
 
-- Go 1.21 o superior
+- Go 1.21 or higher
 - PostgreSQL
-- Make (opcional, para usar los comandos make)
+- Make (optional, for make commands)
 
-## Configuración
+## Configuration
 
-1. Clona el repositorio
-2. Copia el archivo `.env.example` a `.env` y configura las variables de entorno
-3. Ejecuta `go mod download` para instalar las dependencias
-4. Ejecuta `go run cmd/server/main.go` para iniciar el servidor
+1. Clone the repository
+2. Copy `.env.example` to `.env` and configure environment variables
+3. Run `go mod download` to install dependencies
+4. Run `go run cmd/server/main.go` to start the server
 
-## Variables de Entorno
+## Environment Variables
 
-### Configuración de la Base de Datos
+### Database Configuration
 ```
 DB_HOST=localhost
 DB_PORT=5432
@@ -45,60 +47,60 @@ DB_NAME=go_hexagonal
 DB_SSL_MODE=disable
 ```
 
-### Configuración de GORM
+### GORM Configuration
 ```
-GORM_LOG_LEVEL=debug    # Niveles: debug, info, warn, error, silent
+GORM_LOG_LEVEL=debug    # Levels: debug, info, warn, error, silent
 GORM_AUTO_MIGRATE=true  # true/false
 ```
 
-### Configuración del Servidor
+### Server Configuration
 ```
 PORT=3000
 JWT_SECRET=your-secret-key
 ENV=development
 ```
 
-### Explicación de Variables Específicas
+### Specific Variables Explanation
 
 #### DB_SSL_MODE
-Configura el modo SSL para la conexión a PostgreSQL:
-- `disable`: No usa SSL (recomendado para desarrollo local)
-- `require`: Requiere conexión SSL
-- `verify-ca`: Verifica que el certificado del servidor esté firmado por una CA confiable
-- `verify-full`: Verifica el certificado y el nombre del host (más seguro)
+Configures SSL mode for PostgreSQL connection:
+- `disable`: No SSL (recommended for local development)
+- `require`: Requires SSL connection
+- `verify-ca`: Verifies server certificate is signed by a trusted CA
+- `verify-full`: Verifies certificate and hostname (most secure)
 
 #### GORM_LOG_LEVEL
-Controla el nivel de logging de GORM:
-- `debug`: Muestra todas las consultas SQL y detalles
-- `info`: Muestra información general
-- `warn`: Solo muestra advertencias
-- `error`: Solo muestra errores
-- `silent`: No muestra logs
+Controls GORM logging level:
+- `debug`: Shows all SQL queries and details
+- `info`: Shows general information
+- `warn`: Shows only warnings
+- `error`: Shows only errors
+- `silent`: No logs
 
 #### GORM_AUTO_MIGRATE
-Habilita/deshabilita la migración automática de la base de datos:
-- `true`: GORM creará/actualizará las tablas automáticamente
-- `false`: No se realizarán migraciones automáticas
+Enables/disables automatic database migration:
+- `true`: GORM will automatically create/update tables
+- `false`: No automatic migrations will be performed
 
-## Documentación de la API (Swagger)
+## API Documentation (Swagger)
 
-La documentación de la API está disponible a través de Swagger UI. Para acceder:
+API documentation is available through Swagger UI. To access:
 
-1. Inicia el servidor
-2. Abre en tu navegador: `http://localhost:3000/swagger/index.html`
+1. Start the server
+2. Open in your browser: `http://localhost:3000/swagger/index.html`
 
-En Swagger UI podrás:
-- Ver toda la documentación de la API
-- Probar los endpoints directamente
-- Ver los modelos de datos
-- Ver los códigos de respuesta posibles
-- Probar la autenticación con JWT
+In Swagger UI you can:
+- View complete API documentation
+- Test endpoints directly
+- View data models
+- View response codes
+- Test JWT authentication
 
 ## Endpoints
 
-### Usuarios
+### Users
 
-#### Crear Usuario
+#### Create User
 ```bash
 curl --location 'http://localhost:3000/users' \
 --header 'Content-Type: application/json' \
@@ -119,40 +121,25 @@ curl --location 'http://localhost:3000/login' \
 }'
 ```
 
-#### Obtener Usuario (requiere autenticación)
+#### Get User (requires authentication)
 ```bash
 curl --location 'http://localhost:3000/api/users/1' \
 --header 'Authorization: Bearer <token>'
 ```
 
-## Tests
-
-Para ejecutar los tests:
-
-```bash
-go test ./...
-```
-
-## Comandos Make
-
-- `make run`: Inicia el servidor
-- `make test`: Ejecuta los tests
-- `make build`: Compila la aplicación
-- `make clean`: Limpia los archivos compilados
-
-## Seguridad
+## Security
 
 ### Rate Limiting
 
-La API implementa rate limiting para prevenir ataques de fuerza bruta y DoS. Las características incluyen:
+The API implements rate limiting to prevent brute force and DoS attacks. Features include:
 
-- **Límites por IP**: 100 peticiones por minuto
-- **Headers de Respuesta**:
-  - `X-RateLimit-Limit`: Límite total de peticiones (100)
-  - `X-RateLimit-Remaining`: Peticiones restantes
-  - `X-RateLimit-Reset`: Tiempo hasta que se reinicie el contador
+- **IP-based Limits**: 100 requests per minute
+- **Response Headers**:
+  - `X-RateLimit-Limit`: Total request limit (100)
+  - `X-RateLimit-Remaining`: Remaining requests
+  - `X-RateLimit-Reset`: Time until counter reset
 
-#### Ejemplo de Respuesta con Rate Limit
+#### Example Response with Rate Limit
 ```http
 HTTP/1.1 200 OK
 X-RateLimit-Limit: 100
@@ -160,32 +147,30 @@ X-RateLimit-Remaining: 99
 X-RateLimit-Reset: 1710288000
 ```
 
-#### Ejemplo de Respuesta al Exceder el Límite
+#### Example Response When Limit Exceeded
 ```http
 HTTP/1.1 429 Too Many Requests
 Content-Type: application/json
 
 {
-    "error": "Has excedido el límite de peticiones. Por favor, espera un momento."
+    "error": "You have exceeded the request limit. Please wait a moment."
 }
 ```
 
-### Otras Medidas de Seguridad
+### Other Security Measures
 
-- **Autenticación JWT**: Todas las rutas protegidas requieren un token JWT válido
-- **SSL/TLS**: Configurable a través de `DB_SSL_MODE` para conexiones seguras a la base de datos
-- **Validación de Entrada**: Todos los datos de entrada son validados antes de ser procesados
-- **Headers de Seguridad**: La API incluye headers de seguridad estándar
+- **JWT Authentication**: All protected routes require a valid JWT token
+- **SSL/TLS**: Configurable through `DB_SSL_MODE` for secure database connections
+- **Input Validation**: All input data is validated before processing
+- **Security Headers**: The API includes standard security headers
 
+## Docker
 
-
-## Dockerización
-
-### Requisitos
+### Requirements
 - Docker
 - Docker Compose
 
-### Estructura de Docker
+### Docker Structure
 
 #### Dockerfile
 ```dockerfile
@@ -252,99 +237,115 @@ networks:
     driver: bridge
 ```
 
-### Características de la Dockerización
+### Docker Features
 
 1. **Multi-stage Build**
-   - Reduce el tamaño final de la imagen
-   - Separa el proceso de compilación del entorno de ejecución
-   - Incluye solo los archivos necesarios
+   - Reduces final image size
+   - Separates build process from runtime environment
+   - Includes only necessary files
 
-2. **Servicios**
-   - **app**: Servicio principal de la aplicación
-     - Compilado desde el Dockerfile
-     - Expone el puerto 3000
-     - Configurado con variables de entorno
-   - **postgres**: Base de datos PostgreSQL
-     - Usa la imagen oficial de PostgreSQL
-     - Persiste datos mediante volumen
-     - Configurado con credenciales básicas
+2. **Services**
+   - **app**: Main application service
+     - Built from Dockerfile
+     - Exposes port 3000
+     - Configured with environment variables
+   - **postgres**: PostgreSQL database
+     - Uses official PostgreSQL image
+     - Persists data through volume
+     - Configured with basic credentials
 
-3. **Redes**
-   - Red dedicada `app-network`
-   - Aislamiento de servicios
-   - Comunicación segura entre contenedores
+3. **Networks**
+   - Dedicated `app-network`
+   - Service isolation
+   - Secure container communication
 
-4. **Volúmenes**
-   - `postgres_data`: Persiste los datos de PostgreSQL
-   - Evita pérdida de datos al reiniciar contenedores
+4. **Volumes**
+   - `postgres_data`: Persists PostgreSQL data
+   - Prevents data loss on container restart
 
-### Comandos Docker
+### Docker Commands
 
-1. **Construir y ejecutar**
+1. **Build and Run**
 ```bash
-# Construir y levantar todos los servicios
+# Build and start all services
 docker-compose up --build
 
-# Ejecutar en segundo plano
+# Run in background
 docker-compose up -d
 ```
 
-2. **Gestión de contenedores**
+2. **Container Management**
 ```bash
-# Ver logs
+# View logs
 docker-compose logs -f
 
-# Detener servicios
+# Stop services
 docker-compose down
 
-# Reiniciar servicios
+# Restart services
 docker-compose restart
 ```
 
-3. **Mantenimiento**
+3. **Maintenance**
 ```bash
-# Limpiar contenedores no utilizados
+# Clean unused containers
 docker system prune
 
-# Ver uso de recursos
+# View resource usage
 docker stats
 ```
 
-### Variables de Entorno
+### Environment Variables
 
-Las variables de entorno se pueden configurar de dos formas:
+Environment variables can be configured in two ways:
 
-1. **En docker-compose.yml**
+1. **In docker-compose.yml**
 ```yaml
 environment:
   - DB_HOST=postgres
   - DB_PORT=5432
-  # ... otras variables
+  # ... other variables
 ```
 
-2. **En archivo .env**
+2. **In .env file**
 ```env
 DB_HOST=postgres
 DB_PORT=5432
-# ... otras variables
+# ... other variables
 ```
 
-### Consideraciones de Seguridad
+### Security Considerations
 
-1. **Credenciales**
-   - No incluir credenciales sensibles en el código
-   - Usar variables de entorno o secrets de Docker
-   - Cambiar las credenciales por defecto en producción
+1. **Credentials**
+   - Don't include sensitive credentials in code
+   - Use environment variables or Docker secrets
+   - Change default credentials in production
 
-2. **Redes**
-   - Usar redes Docker para aislar servicios
-   - Exponer solo los puertos necesarios
-   - Configurar políticas de red restrictivas
+2. **Networks**
+   - Use Docker networks to isolate services
+   - Expose only necessary ports
+   - Configure restrictive network policies
 
-3. **Volúmenes**
-   - Usar volúmenes nombrados para persistencia
-   - Configurar permisos adecuados
-   - Hacer backup regular de los datos 
+3. **Volumes**
+   - Use named volumes for persistence
+   - Configure appropriate permissions
+   - Regular data backup
 
-   ## Licencia
-    MIT 
+## Contact
+
+### Author
+**Kevin Fernando Burbano Aragón**  
+Systems Engineer and Senior Software Developer with extensive experience in software development.
+
+### Contact Information
+- **Email**: [burbanokevin1997@gmail.com](mailto:burbanokevin1997@gmail.com)
+- **GitHub**: [@kevinburbanodev](https://github.com/kevinburbanodev)
+
+### Experience
+- Systems Engineer with senior-level expertise in software development
+- Specialized in clean architectures and design patterns
+- Expert in API and microservices development
+- Strong background in multiple technologies and frameworks
+
+## License
+MIT 
