@@ -2,6 +2,7 @@ package application
 
 import (
 	"errors"
+	"fmt"
 
 	"go-hexagonal-template/internal/infrastructure/auth"
 	"go-hexagonal-template/internal/modules/user/domain/model"
@@ -44,7 +45,7 @@ func (uc *LoginUserUseCase) Execute(input LoginUserInput) (*LoginUserOutput, err
 	}
 
 	// Generar el token JWT
-	token, err := auth.GenerateToken(user.ID, user.Email)
+	token, err := auth.GenerateToken(fmt.Sprintf("%d", user.ID), user.Email)
 	if err != nil {
 		return nil, err
 	}

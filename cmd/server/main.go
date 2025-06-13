@@ -8,13 +8,37 @@ import (
 	"go-hexagonal-template/internal/modules/user/infrastructure/persistence"
 	"log"
 
+	_ "go-hexagonal-template/docs" // Esto es importante para la documentación Swagger
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title           Go Hexagonal Template API
+// @version         1.0
+// @description     API Template con arquitectura hexagonal en Go
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:3000
+// @BasePath  /
+
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
 
 func main() {
 	// Cargar variables de entorno
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load("../../.env"); err != nil {
 		log.Printf("Error loading .env file: %v", err)
 	}
 
@@ -48,6 +72,9 @@ func main() {
 	{
 		protected.GET("/users/:id", userHandler.GetUser)
 	}
+
+	// Configurar Swagger
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Obtener el puerto de la variable de entorno o usar 3000 por defecto
 	port := cfg.Port

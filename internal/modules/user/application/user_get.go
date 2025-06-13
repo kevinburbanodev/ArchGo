@@ -15,6 +15,6 @@ func NewGetUserUseCase(userRepository port.UserRepository) *GetUserUseCase {
 	}
 }
 
-func (uc *GetUserUseCase) Execute(id string) (*model.User, error) {
+func (uc *GetUserUseCase) Execute(id uint) (*model.User, error) {
 	return uc.userRepository.GetByID(id)
 }

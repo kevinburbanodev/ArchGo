@@ -13,7 +13,7 @@ func TestGetUserUseCase_Execute(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewUserRepositoryMock()
 	useCase := application.NewGetUserUseCase(mockRepo)
-	expectedID := "123"
+	expectedID := uint(123)
 
 	// Act
 	user, err := useCase.Execute(expectedID)
@@ -24,7 +24,6 @@ func TestGetUserUseCase_Execute(t *testing.T) {
 	assert.Equal(t, expectedID, user.ID, "El ID no coincide")
 	assert.Equal(t, "test@example.com", user.Email, "El email no coincide")
 	assert.Equal(t, "Test", user.Name, "El nombre no coincide")
-	assert.Equal(t, "User", user.LastName, "El apellido no coincide")
 	assert.NotEmpty(t, user.CreatedAt, "La fecha de creación no debería estar vacía")
 	assert.NotEmpty(t, user.UpdatedAt, "La fecha de actualización no debería estar vacía")
 }
@@ -35,7 +34,7 @@ func TestGetUserUseCase_Execute_NotFound(t *testing.T) {
 	useCase := application.NewGetUserUseCase(mockRepo)
 
 	// Act
-	user, err := useCase.Execute("nonexistent")
+	user, err := useCase.Execute(9999)
 
 	// Assert
 	assert.Error(t, err, "Debería retornar un error cuando el usuario no existe")

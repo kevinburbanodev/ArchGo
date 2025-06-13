@@ -20,10 +20,9 @@ func NewCreateUserUseCase(userRepository port.UserRepository) *CreateUserUseCase
 }
 
 type CreateUserInput struct {
-	Email    string
-	Name     string
-	LastName string
-	Password string
+	Email    string `json:"email" binding:"required,email"`
+	Name     string `json:"name" binding:"required,min=1"`
+	Password string `json:"password" binding:"required,min=6"`
 }
 
 func (uc *CreateUserUseCase) Execute(input CreateUserInput) (*model.User, error) {
@@ -36,10 +35,9 @@ func (uc *CreateUserUseCase) Execute(input CreateUserInput) (*model.User, error)
 	user := &model.User{
 		Email:     input.Email,
 		Name:      input.Name,
-		LastName:  input.LastName,
 		Password:  string(hashedPassword),
-		CreatedAt: time.Now().Format(time.RFC3339),
-		UpdatedAt: time.Now().Format(time.RFC3339),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	return uc.userRepository.Create(user)

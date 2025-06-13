@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"go-hexagonal-template/internal/modules/user/domain/model"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -61,6 +63,13 @@ func (c *DatabaseConfig) Connect() (*gorm.DB, error) {
 	db, err := gorm.Open(postgres.Open(c.GetDSN()), gormConfig)
 	if err != nil {
 		return nil, err
+	}
+
+	// Auto-migrar las tablas si está configurado
+	if c.AutoMigrate {
+		if err := db.AutoMigrate(&model.User{}); err != nil {
+			return nil, fmt.Errorf("error auto-migrando tablas: %v", err)
+		}
 	}
 
 	return db, nil

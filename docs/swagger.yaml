@@ -1,0 +1,152 @@
+basePath: /
+definitions:
+  domain.User:
+    description: Modelo de usuario del sistema
+    properties:
+      created_at:
+        description: '@Description Fecha de creación del usuario'
+        type: string
+      email:
+        description: '@Description Correo electrónico del usuario (debe ser único)'
+        type: string
+      id:
+        description: '@Description ID único del usuario'
+        type: string
+      name:
+        description: '@Description Nombre del usuario'
+        type: string
+      updated_at:
+        description: '@Description Fecha de última actualización del usuario'
+        type: string
+    required:
+    - email
+    - name
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API Template con arquitectura hexagonal en Go
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Go Hexagonal Template API
+  version: "1.0"
+paths:
+  /api/users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene los detalles de un usuario por su ID
+      parameters:
+      - description: ID del usuario
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Obtener usuario por ID
+      tags:
+      - users
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Autentica un usuario y devuelve un token JWT
+      parameters:
+      - description: Credenciales de usuario
+        in: body
+        name: credentials
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Autenticar usuario
+      tags:
+      - auth
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Crea un nuevo usuario en el sistema
+      parameters:
+      - description: Datos del usuario
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domain.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Crear un nuevo usuario
+      tags:
+      - users
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

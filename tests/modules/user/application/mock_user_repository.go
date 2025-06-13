@@ -12,22 +12,21 @@ import (
 type MockUserRepository struct{}
 
 func (m *MockUserRepository) Create(user *model.User) (*model.User, error) {
-	if user.ID == "" {
-		user.ID = "test-id-123" // ID fijo para testing
+	if user.ID == 0 {
+		user.ID = 1 // ID fijo para testing
 	}
 	return user, nil
 }
 
-func (m *MockUserRepository) GetByID(id string) (*model.User, error) {
-	if id == "nonexistent" {
+func (m *MockUserRepository) GetByID(id uint) (*model.User, error) {
+	if id == 9999 {
 		return nil, assert.AnError
 	}
-	now := time.Now().Format(time.RFC3339)
+	now := time.Now()
 	return &model.User{
 		ID:        id,
 		Email:     "test@example.com",
 		Name:      "Test",
-		LastName:  "User",
 		CreatedAt: now,
 		UpdatedAt: now,
 	}, nil

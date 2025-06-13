@@ -17,23 +17,25 @@ func NewUserRepositoryMock() *UserRepositoryMock {
 }
 
 func (m *UserRepositoryMock) Create(user *model.User) (*model.User, error) {
-	if user.ID == "" {
-		user.ID = "test-id-123" // ID fijo para testing
+	now := time.Now()
+	if user.ID == 0 {
+		user.ID = 1 // ID fijo para testing
 	}
+	user.CreatedAt = now
+	user.UpdatedAt = now
 	return user, nil
 }
 
-func (m *UserRepositoryMock) GetByID(id string) (*model.User, error) {
-	if id == "nonexistent" {
+func (m *UserRepositoryMock) GetByID(id uint) (*model.User, error) {
+	if id == 9999 {
 		return nil, assert.AnError
 	}
-	now := time.Now().Format(time.RFC3339)
+	now := time.Now()
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("password123"), bcrypt.DefaultCost)
 	return &model.User{
 		ID:        id,
 		Email:     "test@example.com",
 		Name:      "Test",
-		LastName:  "User",
 		Password:  string(hashedPassword),
 		CreatedAt: now,
 		UpdatedAt: now,
@@ -44,13 +46,12 @@ func (m *UserRepositoryMock) GetByEmail(email string) (*model.User, error) {
 	if email == "nonexistent@example.com" {
 		return nil, assert.AnError
 	}
-	now := time.Now().Format(time.RFC3339)
+	now := time.Now()
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("password123"), bcrypt.DefaultCost)
 	return &model.User{
-		ID:        "test-id-123",
+		ID:        1,
 		Email:     email,
 		Name:      "Test",
-		LastName:  "User",
 		Password:  string(hashedPassword),
 		CreatedAt: now,
 		UpdatedAt: now,

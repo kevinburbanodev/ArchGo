@@ -35,7 +35,7 @@ func (r *UserRepositoryImpl) Create(user *model.User) (*model.User, error) {
 }
 
 // GetByID implementa el método GetByID de la interfaz UserRepository
-func (r *UserRepositoryImpl) GetByID(id string) (*model.User, error) {
+func (r *UserRepositoryImpl) GetByID(id uint) (*model.User, error) {
 	var user model.User
 	result := r.db.First(&user, "id = ?", id)
 	if result.Error != nil {

@@ -3,12 +3,14 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
 	"go-hexagonal-template/internal/handlers"
+	"go-hexagonal-template/internal/modules/user/application"
 	"go-hexagonal-template/internal/modules/user/domain/model"
 	"go-hexagonal-template/tests/mocks"
 
@@ -36,12 +38,11 @@ func TestUserHandler_GetUser(t *testing.T) {
 	router, mockRepo := setupTestRouter()
 
 	// Crear un usuario de prueba
-	now := time.Now().Format(time.RFC3339)
+	now := time.Now()
 	user := &model.User{
-		ID:        "test-id-123",
+		ID:        1,
 		Email:     "test@example.com",
 		Name:      "Test",
-		LastName:  "User",
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -70,7 +71,7 @@ func TestUserHandler_GetUser(t *testing.T) {
 
 	// Act
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/users/"+createdUser.ID, bytes.NewBuffer(nil))
+	req, _ := http.NewRequest("GET", "/api/users/"+fmt.Sprintf("%d", createdUser.ID), bytes.NewBuffer(nil))
 	req.Header.Set("Authorization", "Bearer "+loginResponse.Token)
 	router.ServeHTTP(w, req)
 
@@ -84,9 +85,8 @@ func TestUserHandler_GetUser(t *testing.T) {
 	assert.Equal(t, createdUser.ID, response.ID, "El ID no coincide")
 	assert.Equal(t, createdUser.Email, response.Email, "El email no coincide")
 	assert.Equal(t, createdUser.Name, response.Name, "El nombre no coincide")
-	assert.Equal(t, createdUser.LastName, response.LastName, "El apellido no coincide")
-	assert.Equal(t, createdUser.CreatedAt, response.CreatedAt, "La fecha de creación no coincide")
-	assert.Equal(t, createdUser.UpdatedAt, response.UpdatedAt, "La fecha de actualización no coincide")
+	assert.WithinDuration(t, createdUser.CreatedAt, response.CreatedAt, time.Second, "La fecha de creación no coincide")
+	assert.WithinDuration(t, createdUser.UpdatedAt, response.UpdatedAt, time.Second, "La fecha de actualización no coincide")
 }
 
 func TestUserHandler_GetUser_NotFound(t *testing.T) {
@@ -113,7 +113,7 @@ func TestUserHandler_GetUser_NotFound(t *testing.T) {
 
 	// Act
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/users/nonexistent", bytes.NewBuffer(nil))
+	req, _ := http.NewRequest("GET", "/api/users/9999", bytes.NewBuffer(nil))
 	req.Header.Set("Authorization", "Bearer "+loginResponse.Token)
 	router.ServeHTTP(w, req)
 
@@ -131,11 +131,10 @@ func TestUserHandler_GetUser_NotFound(t *testing.T) {
 func TestUserHandler_CreateUser(t *testing.T) {
 	// Arrange
 	router, _ := setupTestRouter()
-	input := map[string]string{
-		"email":     "test@example.com",
-		"name":      "Test",
-		"last_name": "User",
-		"password":  "password123",
+	input := application.CreateUserInput{
+		Email:    "test@example.com",
+		Name:     "Test",
+		Password: "password123",
 	}
 	jsonInput, _ := json.Marshal(input)
 
@@ -153,9 +152,8 @@ func TestUserHandler_CreateUser(t *testing.T) {
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 	assert.NoError(t, err, "Error al deserializar la respuesta")
 	assert.NotEmpty(t, response.ID, "El ID no debería estar vacío")
-	assert.Equal(t, input["email"], response.Email, "El email no coincide")
-	assert.Equal(t, input["name"], response.Name, "El nombre no coincide")
-	assert.Equal(t, input["last_name"], response.LastName, "El apellido no coincide")
+	assert.Equal(t, input.Email, response.Email, "El email no coincide")
+	assert.Equal(t, input.Name, response.Name, "El nombre no coincide")
 	assert.Empty(t, response.Password, "La contraseña no debería estar en la respuesta")
 	assert.NotEmpty(t, response.CreatedAt, "La fecha de creación no debería estar vacía")
 	assert.NotEmpty(t, response.UpdatedAt, "La fecha de actualización no debería estar vacía")
@@ -164,11 +162,10 @@ func TestUserHandler_CreateUser(t *testing.T) {
 func TestUserHandler_CreateUser_InvalidInput(t *testing.T) {
 	// Arrange
 	router, _ := setupTestRouter()
-	input := map[string]string{
-		"email":     "invalid-email", // Email inválido
-		"name":      "",              // Nombre vacío
-		"last_name": "User",
-		"password":  "123", // Contraseña muy corta
+	input := application.CreateUserInput{
+		Email:    "invalid-email", // Email inválido
+		Name:     "",              // Nombre vacío
+		Password: "123",           // Contraseña muy corta
 	}
 	jsonInput, _ := json.Marshal(input)
 
@@ -251,12 +248,11 @@ func TestUserHandler_GetUser_WithAuth(t *testing.T) {
 	router, mockRepo := setupTestRouter()
 
 	// Crear un usuario de prueba
-	now := time.Now().Format(time.RFC3339)
+	now := time.Now()
 	user := &model.User{
-		ID:        "test-id-123",
+		ID:        2,
 		Email:     "test@example.com",
 		Name:      "Test",
-		LastName:  "User",
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -285,7 +281,7 @@ func TestUserHandler_GetUser_WithAuth(t *testing.T) {
 
 	// Act - Obtener usuario con el token
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/users/"+createdUser.ID, bytes.NewBuffer(nil))
+	req, _ := http.NewRequest("GET", "/api/users/"+fmt.Sprintf("%d", createdUser.ID), bytes.NewBuffer(nil))
 	req.Header.Set("Authorization", "Bearer "+loginResponse.Token)
 	router.ServeHTTP(w, req)
 
@@ -299,9 +295,8 @@ func TestUserHandler_GetUser_WithAuth(t *testing.T) {
 	assert.Equal(t, createdUser.ID, response.ID, "El ID no coincide")
 	assert.Equal(t, createdUser.Email, response.Email, "El email no coincide")
 	assert.Equal(t, createdUser.Name, response.Name, "El nombre no coincide")
-	assert.Equal(t, createdUser.LastName, response.LastName, "El apellido no coincide")
-	assert.Equal(t, createdUser.CreatedAt, response.CreatedAt, "La fecha de creación no coincide")
-	assert.Equal(t, createdUser.UpdatedAt, response.UpdatedAt, "La fecha de actualización no coincide")
+	assert.WithinDuration(t, createdUser.CreatedAt, response.CreatedAt, time.Second, "La fecha de creación no coincide")
+	assert.WithinDuration(t, createdUser.UpdatedAt, response.UpdatedAt, time.Second, "La fecha de actualización no coincide")
 }
 
 func TestUserHandler_GetUser_WithoutAuth(t *testing.T) {
@@ -310,7 +305,7 @@ func TestUserHandler_GetUser_WithoutAuth(t *testing.T) {
 
 	// Act
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/users/test-id-123", bytes.NewBuffer(nil))
+	req, _ := http.NewRequest("GET", "/api/users/9999", bytes.NewBuffer(nil))
 	// No se añade el token de autorización
 	router.ServeHTTP(w, req)
 

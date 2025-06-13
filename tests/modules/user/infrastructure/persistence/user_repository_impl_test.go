@@ -35,12 +35,11 @@ func TestUserRepositoryImpl_Create(t *testing.T) {
 	// Arrange
 	mockDB := setupTestDB()
 	repo := persistence.NewUserRepositoryImpl(mockDB)
-	now := time.Now().Format(time.RFC3339)
+	now := time.Now()
 	user := &model.User{
-		ID:        "test-id-123", // ID fijo para testing
+		ID:        1,
 		Email:     "test@example.com",
 		Name:      "Test",
-		LastName:  "User",
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -49,7 +48,7 @@ func TestUserRepositoryImpl_Create(t *testing.T) {
 	mockDB.On("Create", user).Run(func(args mock.Arguments) {
 		arg := args.Get(0).(*model.User)
 		// Asegurarse de que el ID se mantiene
-		assert.Equal(t, "test-id-123", arg.ID, "El ID debería mantenerse")
+		assert.Equal(t, uint(1), arg.ID, "El ID debería mantenerse")
 	}).Return(&gorm.DB{})
 
 	// Act
@@ -58,10 +57,9 @@ func TestUserRepositoryImpl_Create(t *testing.T) {
 	// Assert
 	assert.NoError(t, err, "Error al crear el usuario")
 	assert.NotEmpty(t, createdUser.ID, "El ID del usuario no debería estar vacío")
-	assert.Equal(t, "test-id-123", createdUser.ID, "El ID debería ser el mismo")
+	assert.Equal(t, uint(1), createdUser.ID, "El ID debería ser el mismo")
 	assert.Equal(t, user.Email, createdUser.Email, "El email no coincide")
 	assert.Equal(t, user.Name, createdUser.Name, "El nombre no coincide")
-	assert.Equal(t, user.LastName, createdUser.LastName, "El apellido no coincide")
 	assert.Equal(t, user.CreatedAt, createdUser.CreatedAt, "La fecha de creación no coincide")
 	assert.Equal(t, user.UpdatedAt, createdUser.UpdatedAt, "La fecha de actualización no coincide")
 
@@ -72,12 +70,11 @@ func TestUserRepositoryImpl_GetByID(t *testing.T) {
 	// Arrange
 	mockDB := setupTestDB()
 	repo := persistence.NewUserRepositoryImpl(mockDB)
-	now := time.Now().Format(time.RFC3339)
+	now := time.Now()
 	user := &model.User{
-		ID:        "test-id-123",
+		ID:        1,
 		Email:     "test@example.com",
 		Name:      "Test",
-		LastName:  "User",
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -97,7 +94,6 @@ func TestUserRepositoryImpl_GetByID(t *testing.T) {
 	assert.Equal(t, user.ID, foundUser.ID, "El ID no coincide")
 	assert.Equal(t, user.Email, foundUser.Email, "El email no coincide")
 	assert.Equal(t, user.Name, foundUser.Name, "El nombre no coincide")
-	assert.Equal(t, user.LastName, foundUser.LastName, "El apellido no coincide")
 	assert.Equal(t, user.CreatedAt, foundUser.CreatedAt, "La fecha de creación no coincide")
 	assert.Equal(t, user.UpdatedAt, foundUser.UpdatedAt, "La fecha de actualización no coincide")
 
@@ -110,10 +106,10 @@ func TestUserRepositoryImpl_GetByID_NotFound(t *testing.T) {
 	repo := persistence.NewUserRepositoryImpl(mockDB)
 
 	// Configurar el mock para First con error
-	mockDB.On("First", mock.Anything, []interface{}{"id = ?", "nonexistent"}).Return(&gorm.DB{Error: gorm.ErrRecordNotFound})
+	mockDB.On("First", mock.Anything, []interface{}{"id = ?", uint(9999)}).Return(&gorm.DB{Error: gorm.ErrRecordNotFound})
 
 	// Act
-	user, err := repo.GetByID("nonexistent")
+	user, err := repo.GetByID(9999)
 
 	// Assert
 	assert.Error(t, err, "Debería retornar un error cuando el usuario no existe")
