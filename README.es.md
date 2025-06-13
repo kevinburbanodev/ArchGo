@@ -340,6 +340,7 @@ Ingeniero en Sistemas y Desarrollador de Software Senior con amplia experiencia 
 ### Información de Contacto
 - **Email**: [burbanokevin1997@gmail.com](mailto:burbanokevin1997@gmail.com)
 - **GitHub**: [@kevinburbanodev](https://github.com/kevinburbanodev)
+- **LinkedIn**: [Kevin Fernando Burbano Aragón](https://www.linkedin.com/in/kevin-fernando-burbano-arag%C3%B3n-78b3871a0/)
 
 ### Experiencia
 - Ingeniero en Sistemas con experiencia senior en desarrollo de software

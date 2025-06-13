@@ -340,6 +340,7 @@ Systems Engineer and Senior Software Developer with extensive experience in soft
 ### Contact Information
 - **Email**: [burbanokevin1997@gmail.com](mailto:burbanokevin1997@gmail.com)
 - **GitHub**: [@kevinburbanodev](https://github.com/kevinburbanodev)
+- **LinkedIn**: [Kevin Fernando Burbano Aragón](https://www.linkedin.com/in/kevin-fernando-burbano-arag%C3%B3n-78b3871a0/)
 
 ### Experience
 - Systems Engineer with senior-level expertise in software development
