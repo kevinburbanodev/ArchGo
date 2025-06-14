@@ -49,11 +49,11 @@ Una plantilla robusta para construir aplicaciones en Go utilizando arquitectura 
 
 ### Configuración de Base de Datos
 ```
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=go_hexagonal
+DB_HOST=your_db_host
+DB_PORT=your_db_port
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
 DB_SSL_MODE=disable
 ```
 
@@ -103,7 +103,7 @@ Este proyecto utiliza Swagger para la documentación de la API. Para generar y v
 
 2. Genera la documentación de Swagger:
    ```bash
-   swag init -g cmd/server/main.go
+   cd cmd/server && swag init
    ```
 
 3. La documentación estará disponible en:
@@ -113,7 +113,7 @@ Este proyecto utiliza Swagger para la documentación de la API. Para generar y v
 
 4. Para actualizar la documentación después de hacer cambios en la API:
    ```bash
-   swag init -g cmd/server/main.go
+   cd cmd/server && swag init
    ```
 
 Nota: Asegúrate de agregar anotaciones de Swagger a tus handlers para mantener la documentación actualizada.

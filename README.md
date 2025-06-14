@@ -49,11 +49,11 @@ A robust template for building Go applications using hexagonal architecture (als
 
 ### Database Configuration
 ```
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=go_hexagonal
+DB_HOST=your_db_host
+DB_PORT=your_db_port
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
 DB_SSL_MODE=disable
 ```
 
@@ -103,7 +103,7 @@ This project uses Swagger for API documentation. To generate and view the docume
 
 2. Generate the Swagger documentation:
    ```bash
-   swag init -g cmd/server/main.go
+   cd cmd/server && swag init
    ```
 
 3. The documentation will be available at:
@@ -113,7 +113,7 @@ This project uses Swagger for API documentation. To generate and view the docume
 
 4. To update the documentation after making changes to the API:
    ```bash
-   swag init -g cmd/server/main.go
+   cd cmd/server && swag init
    ```
 
 Note: Make sure to add Swagger annotations to your handlers to keep the documentation up to date.
