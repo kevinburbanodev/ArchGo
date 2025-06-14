@@ -1,6 +1,9 @@
 #!/bin/bash
 
-echo "🔍 Ejecutando verificaciones pre-push..."
+set -e  # Exit on error
+set -x  # Print commands
+
+echo "🔍 Iniciando verificaciones pre-push..."
 
 # Verificar si golangci-lint está instalado
 if ! command -v golangci-lint &> /dev/null; then
@@ -9,29 +12,32 @@ if ! command -v golangci-lint &> /dev/null; then
     exit 1
 fi
 
-# Ejecutar tests
-echo "🧪 Ejecutando tests..."
-go test ./... -v
-if [ $? -ne 0 ]; then
-    echo "❌ Los tests han fallado. Por favor, corrige los errores antes de hacer push."
+# Verificar si estamos en el directorio correcto
+if [ ! -f "go.mod" ]; then
+    echo "❌ No se encontró el archivo go.mod. Asegúrate de estar en el directorio raíz del proyecto."
     exit 1
 fi
+
+# Ejecutar tests
+echo "🧪 Ejecutando tests..."
+go test ./... -v || {
+    echo "❌ Los tests han fallado. Por favor, corrige los errores antes de hacer push."
+    exit 1
+}
 
 # Ejecutar linter
 echo "🔧 Ejecutando linter..."
-golangci-lint run
-if [ $? -ne 0 ]; then
+golangci-lint run || {
     echo "❌ El linter ha encontrado errores. Por favor, corrige los errores antes de hacer push."
     exit 1
-fi
+}
 
 # Verificar formato del código
 echo "📝 Verificando formato del código..."
-go fmt ./...
-if [ $? -ne 0 ]; then
+go fmt ./... || {
     echo "❌ Hay problemas con el formato del código. Por favor, corrige los errores antes de hacer push."
     exit 1
-fi
+}
 
 echo "✅ Todas las verificaciones han pasado correctamente!"
 exit 0 
