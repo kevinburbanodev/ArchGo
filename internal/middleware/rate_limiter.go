@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -39,8 +40,8 @@ func RateLimiterMiddleware() gin.HandlerFunc {
 
 		// Agregar headers con información del rate limit
 		c.Header("X-RateLimit-Limit", "100")
-		c.Header("X-RateLimit-Remaining", string(context.Remaining))
-		c.Header("X-RateLimit-Reset", string(context.Reset))
+		c.Header("X-RateLimit-Remaining", strconv.FormatInt(context.Remaining, 10))
+		c.Header("X-RateLimit-Reset", strconv.FormatInt(context.Reset, 10))
 
 		// Si se excedió el límite, retornar error
 		if context.Reached {
