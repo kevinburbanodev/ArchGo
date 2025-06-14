@@ -94,17 +94,29 @@ Enables/disables automatic database migration:
 
 ## API Documentation (Swagger)
 
-API documentation is available through Swagger UI. To access:
+This project uses Swagger for API documentation. To generate and view the documentation:
 
-1. Start the server
-2. Open in your browser: `http://localhost:3000/swagger/index.html`
+1. Install the Swagger CLI tool:
+   ```bash
+   go install github.com/swaggo/swag/cmd/swag@latest
+   ```
 
-In Swagger UI you can:
-- View complete API documentation
-- Test endpoints directly
-- View data models
-- View response codes
-- Test JWT authentication
+2. Generate the Swagger documentation:
+   ```bash
+   swag init -g cmd/server/main.go
+   ```
+
+3. The documentation will be available at:
+   ```
+   http://localhost:3000/swagger/index.html
+   ```
+
+4. To update the documentation after making changes to the API:
+   ```bash
+   swag init -g cmd/server/main.go
+   ```
+
+Note: Make sure to add Swagger annotations to your handlers to keep the documentation up to date.
 
 ## Endpoints
 
@@ -341,7 +353,7 @@ DB_PORT=5432
    - Configure appropriate permissions
    - Regular data backup
 
-  ## Git Hooks
+## Git Hooks
 
 This project includes Git hooks to ensure code quality. To set up the hooks:
 
@@ -360,7 +372,6 @@ The pre-push hook will run:
 - Linter
 - Code formatting checks
 
-
 ## Contact
 
 ### Author
@@ -377,7 +388,6 @@ Systems Engineer and Senior Software Developer with extensive experience in soft
 - Specialized in clean architectures and design patterns
 - Expert in API and microservices development
 - Strong background in multiple technologies and frameworks
-
 
 ## License
 MIT 

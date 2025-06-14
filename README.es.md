@@ -94,17 +94,29 @@ Habilita/deshabilita la migración automática de la base de datos:
 
 ## Documentación de la API (Swagger)
 
-La documentación de la API está disponible a través de Swagger UI. Para acceder:
+Este proyecto utiliza Swagger para la documentación de la API. Para generar y ver la documentación:
 
-1. Iniciar el servidor
-2. Abrir en el navegador: `http://localhost:3000/swagger/index.html`
+1. Instala la herramienta CLI de Swagger:
+   ```bash
+   go install github.com/swaggo/swag/cmd/swag@latest
+   ```
 
-En Swagger UI puedes:
-- Ver la documentación completa de la API
-- Probar endpoints directamente
-- Ver modelos de datos
-- Ver códigos de respuesta
-- Probar autenticación JWT
+2. Genera la documentación de Swagger:
+   ```bash
+   swag init -g cmd/server/main.go
+   ```
+
+3. La documentación estará disponible en:
+   ```
+   http://localhost:3000/swagger/index.html
+   ```
+
+4. Para actualizar la documentación después de hacer cambios en la API:
+   ```bash
+   swag init -g cmd/server/main.go
+   ```
+
+Nota: Asegúrate de agregar anotaciones de Swagger a tus handlers para mantener la documentación actualizada.
 
 ## Endpoints
 
@@ -359,7 +371,6 @@ El hook pre-push ejecutará:
 - Tests
 - Linter
 - Verificaciones de formato del código
-
 
 ## Contacto
 
