@@ -85,6 +85,8 @@ func main() {
 		port = "3000"
 	}
 
-	// Iniciar el servidor en el puerto configurado
-	r.Run(fmt.Sprintf(":%s", port))
+	// Iniciar el servidor
+	if err := r.Run(fmt.Sprintf(":%s", port)); err != nil {
+		log.Fatalf("Error al iniciar el servidor: %v", err)
+	}
 }
