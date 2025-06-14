@@ -2,6 +2,13 @@
 
 echo "🔍 Ejecutando verificaciones pre-push..."
 
+# Verificar si golangci-lint está instalado
+if ! command -v golangci-lint &> /dev/null; then
+    echo "❌ golangci-lint no está instalado. Por favor, instálalo con:"
+    echo "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"
+    exit 1
+fi
+
 # Ejecutar tests
 echo "🧪 Ejecutando tests..."
 go test ./... -v
