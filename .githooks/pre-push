@@ -1,0 +1,30 @@
+#!/bin/bash
+
+echo "🔍 Ejecutando verificaciones pre-push..."
+
+# Ejecutar tests
+echo "🧪 Ejecutando tests..."
+go test ./... -v
+if [ $? -ne 0 ]; then
+    echo "❌ Los tests han fallado. Por favor, corrige los errores antes de hacer push."
+    exit 1
+fi
+
+# Ejecutar linter
+echo "🔧 Ejecutando linter..."
+golangci-lint run
+if [ $? -ne 0 ]; then
+    echo "❌ El linter ha encontrado errores. Por favor, corrige los errores antes de hacer push."
+    exit 1
+fi
+
+# Verificar formato del código
+echo "📝 Verificando formato del código..."
+go fmt ./...
+if [ $? -ne 0 ]; then
+    echo "❌ Hay problemas con el formato del código. Por favor, corrige los errores antes de hacer push."
+    exit 1
+fi
+
+echo "✅ Todas las verificaciones han pasado correctamente!"
+exit 0 

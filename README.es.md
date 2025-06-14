@@ -341,6 +341,26 @@ DB_PORT=5432
    - Configurar permisos apropiados
    - Respaldo regular de datos
 
+## Git Hooks
+
+Este proyecto incluye Git hooks para asegurar la calidad del código. Para configurar los hooks:
+
+1. Asegúrate de tener las herramientas necesarias instaladas:
+   ```bash
+   go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+   ```
+
+2. Configura Git para usar los hooks del proyecto:
+   ```bash
+   git config core.hooksPath .githooks
+   ```
+
+El hook pre-push ejecutará:
+- Tests
+- Linter
+- Verificaciones de formato del código
+
+
 ## Contacto
 
 ### Autor
