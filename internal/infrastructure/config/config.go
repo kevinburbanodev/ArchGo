@@ -31,5 +31,5 @@ func NewConfig() (*Config, error) {
 }
 
 func (c *Config) IsProduction() bool {
-	return c.Environment == "production"
+	return c.Environment == "production" || c.Environment == "prod"
 }
